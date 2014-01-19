@@ -28,7 +28,7 @@
             android:label="@string/title_activity_timer_detail_fragment" >
         </activity>
         <activity
-            android:name="com.example.timernav.TimePickerFragment"
+            android:name="com.example.timernav.TimePickerFragmentDialogue"
             android:label="@string/title_activity_time_picker_fragment" >
         </activity>
     </application>
