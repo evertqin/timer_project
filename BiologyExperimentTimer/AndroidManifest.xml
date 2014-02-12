@@ -12,8 +12,7 @@
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
-        android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:label="@string/app_name">
         <uses-library android:name="android.test.runner" />
         <activity
             android:name="com.timer.biologyexperimenttimer.Dashboard"
@@ -23,6 +22,12 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        
+        <activity android:name="com.timer.biologyexperimenttimer.FavoriteAndRecent"
+            android:label="favandrecent">
+       
+            
         </activity>
     </application>
 
