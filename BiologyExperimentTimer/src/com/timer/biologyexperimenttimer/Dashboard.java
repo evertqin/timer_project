@@ -25,10 +25,6 @@ import com.example.biologyexperimenttimer.R;
 import com.timer.common.ClockTicking;
 
 public class Dashboard extends FragmentActivity {
-
-	// private Timer potocolTimer = new ProtocolTimer();
-	// private TimersObjectContainer countDownTimersContainer = new
-	// TimersObjectContainer();
 	private TextView countDownTimerTextView;
 	private List<Button> mButtons = new ArrayList<Button>();
 	private List<CountDownTimerWithActiveIndicator> mCountDownTimers = new ArrayList<CountDownTimerWithActiveIndicator>();
@@ -82,10 +78,14 @@ public class Dashboard extends FragmentActivity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
+
 				mCurrentCountDownTimer.disable();
 				mCurrentCountDownTimer = mCountDownTimers.get(ID - 1);
-				System.out.println(ID - 1);
-				mCurrentCountDownTimer.enable();
+				if (mCurrentCountDownTimer.isFinished()) {
+					mCurrentCountDownTimer.onFinish();
+				} else {
+					mCurrentCountDownTimer.enable();
+				}
 			}
 		});
 		return button;
@@ -94,6 +94,7 @@ public class Dashboard extends FragmentActivity {
 	class CountDownTimerWithActiveIndicator extends CountDownTimer {
 
 		private boolean mIsActive = false;
+		private boolean mIsFinished = false;
 
 		public CountDownTimerWithActiveIndicator(long millisInFuture,
 				long countDownInterval, boolean isActive) {
@@ -109,9 +110,14 @@ public class Dashboard extends FragmentActivity {
 			mIsActive = false;
 		}
 
+		public boolean isFinished() {
+			return mIsFinished;
+		}
+
 		@Override
 		public void onFinish() {
 			// TODO Auto-generated method stub
+			mIsFinished = true;
 			if (mIsActive) {
 				countDownTimerTextView.setText("done~");
 			}
@@ -137,7 +143,7 @@ public class Dashboard extends FragmentActivity {
 				enteredTime * 1000, 1000, true);
 		mCountDownTimers.add(mCurrentCountDownTimer);
 		mCurrentCountDownTimer.start();
-		
+
 		addNewButton(mCountDownTimers.size());
 
 	}
