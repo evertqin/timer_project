@@ -2,6 +2,7 @@ package com.timer.biologyexperimenttimer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -113,6 +114,14 @@ public class TimePickerFragmentDialogue extends DialogFragment {
 		displayTimeView.setText(displayString);
 	}
 	
+	private long convertedTime() {
+		int second = enteredTime % 100;
+		int minute = enteredTime / 100 % 100;
+		int hour = enteredTime / 10000;
+		long mills = TimeUnit.HOURS.toMillis(hour) + TimeUnit.MINUTES.toMillis(minute) + TimeUnit.SECONDS.toMillis(second);
+		return mills;
+	}
+	
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 		// Use the Builder class for convenient dialog construction
@@ -124,7 +133,7 @@ public class TimePickerFragmentDialogue extends DialogFragment {
 							public void onClick(DialogInterface dialog, int id) {
 								// return the value in the time picker box
 								Dashboard dashboard = (Dashboard) getActivity();
-								dashboard.onFinishedTimePicker(enteredTime);
+								dashboard.onFinishedTimePicker(convertedTime());
 							}
 						})
 				.setNegativeButton("Cancel",

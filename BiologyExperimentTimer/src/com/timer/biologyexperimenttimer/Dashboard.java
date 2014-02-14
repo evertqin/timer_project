@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -12,6 +13,8 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
+import android.text.format.Time;
+import android.util.TimeFormatException;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -82,7 +85,7 @@ public class Dashboard extends FragmentActivity {
 				mCurrentCountDownTimer.disable();
 				mCurrentCountDownTimer = mCountDownTimers.get(ID - 1);
 				if (mCurrentCountDownTimer.isFinished()) {
-					mCurrentCountDownTimer.onFinish();
+					countDownTimerTextView.setTag("Done");
 				} else {
 					mCurrentCountDownTimer.enable();
 				}
@@ -127,20 +130,24 @@ public class Dashboard extends FragmentActivity {
 		public void onTick(long millisUntilFinished) {
 			// TODO Auto-generated method stub
 			if (mIsActive) {
-				countDownTimerTextView.setText("seconds remaining: "
-						+ millisUntilFinished / 1000);
+				String hmsString = String.format("%02d:%02d:%02d",
+						TimeUnit.MILLISECONDS.toHours(millisUntilFinished),
+						TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millisUntilFinished)),
+			            TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished)));
+
+				countDownTimerTextView.setText(hmsString);
 			}
 		}
 
 	}
 
-	public void onFinishedTimePicker(int enteredTime) {
+	public void onFinishedTimePicker(long enteredTime) {
 
 		if (mCurrentCountDownTimer != null) {
 			mCurrentCountDownTimer.disable();
 		}
 		mCurrentCountDownTimer = new CountDownTimerWithActiveIndicator(
-				enteredTime * 1000, 1000, true);
+				enteredTime , 1000, true);
 		mCountDownTimers.add(mCurrentCountDownTimer);
 		mCurrentCountDownTimer.start();
 
