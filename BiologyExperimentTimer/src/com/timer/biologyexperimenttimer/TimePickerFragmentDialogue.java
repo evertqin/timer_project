@@ -133,7 +133,7 @@ public class TimePickerFragmentDialogue extends DialogFragment {
 							public void onClick(DialogInterface dialog, int id) {
 								// return the value in the time picker box
 								Dashboard dashboard = (Dashboard) getActivity();
-								dashboard.onFinishedTimePicker(convertedTime());
+								dashboard.onTimePickerFinished(convertedTime());
 							}
 						})
 				.setNegativeButton("Cancel",
