@@ -48,7 +48,11 @@ public class CountDownTimerWithActiveIndicator extends CountDownTimer {
 		// TODO Auto-generated method stub
 		if (mCdfe != null) {
 			mCdfe.finish();
+			if(mIsActive) {
+				mCdfe.activeFinish();
+			}
 		}
+		mIsFinished = true;
 	}
 
 	@Override

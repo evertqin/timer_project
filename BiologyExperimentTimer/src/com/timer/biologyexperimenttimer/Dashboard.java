@@ -2,12 +2,12 @@ package com.timer.biologyexperimenttimer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
@@ -63,8 +63,6 @@ public class Dashboard extends FragmentActivity {
 		return super.onOptionsItemSelected(item);
 	}
 
-	
-	
 	public Button addNewButton(final int ID) {
 		Button button = new Button(this);
 
@@ -85,16 +83,15 @@ public class Dashboard extends FragmentActivity {
 				mCurrentCountDownTimer.disable();
 				mCurrentCountDownTimer = mCountDownTimers.get(ID);
 				if (mCurrentCountDownTimer.isFinished()) {
-					mCountDownTimerTextView.setTag("Done");
+					mCountDownTimerTextView.setText("Done");
 				} else {
 					mCurrentCountDownTimer.enable();
 				}
 			}
 		});
+
 		return button;
 	}
-
-
 
 	public void onTimePickerFinished(long enteredTime) {
 
@@ -103,32 +100,49 @@ public class Dashboard extends FragmentActivity {
 		}
 		final Button newButton = addNewButton(mCountDownTimers.size());
 		mCurrentCountDownTimer = new CountDownTimerWithActiveIndicator(
-				enteredTime , 1000).setTickingCallback(new CountDownTickingEvent() {
-					
+				enteredTime, 1000).setTickingCallback(
+				new CountDownTickingEvent() {
+
 					@Override
 					public void ticking(long millisUntilFinished) {
 						// TODO Auto-generated method stub
-							String hmsString = String.format("%02d:%02d:%02d",
-									TimeUnit.MILLISECONDS.toHours(millisUntilFinished),
-									TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millisUntilFinished)),
-						            TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished)));
+						String hmsString = String.format(
+								Locale.US,
+								"%02d:%02d:%02d",
+								TimeUnit.MILLISECONDS
+										.toHours(millisUntilFinished),
+								TimeUnit.MILLISECONDS
+										.toMinutes(millisUntilFinished)
+										- TimeUnit.HOURS
+												.toMinutes(TimeUnit.MILLISECONDS
+														.toHours(millisUntilFinished)),
+								TimeUnit.MILLISECONDS
+										.toSeconds(millisUntilFinished)
+										- TimeUnit.MINUTES
+												.toSeconds(TimeUnit.MILLISECONDS
+														.toMinutes(millisUntilFinished)));
 
-							mCountDownTimerTextView.setText(hmsString);
+						mCountDownTimerTextView.setText(hmsString);
 
 					}
 				}).setFinishCallback(new CountDownFinishEvent() {
-					
-					@Override
-					public void finish() {
-						// TODO Auto-generated method stub
-						newButton.getBackground().setColorFilter(0xFFFF0000, PorterDuff.Mode.OVERLAY);
-						
-					}
-				});
+
+			@Override
+			public void finish() {
+				// TODO Auto-generated method stub
+				newButton.getBackground().setColorFilter(0xFFFF0000,
+						PorterDuff.Mode.OVERLAY);
+
+			}
+
+			@Override
+			public void activeFinish() {
+				// TODO Auto-generated method stub
+				mCountDownTimerTextView.setText("Done");
+			}
+		});
 		mCountDownTimers.add(mCurrentCountDownTimer);
 		mCurrentCountDownTimer.start();
-
-		
 
 	}
 
